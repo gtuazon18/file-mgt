@@ -21,7 +21,6 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Initialize users with prehashed passwords
 const initializeUsers = async () => {
   const hashedAdminPassword = await bcrypt.hash("admin123", 10);
   const hashedUserPassword = await bcrypt.hash("user123", 10);
@@ -33,13 +32,12 @@ const initializeUsers = async () => {
 };
 
 let users = [];
-let uploadedFiles = []; // Store file metadata (filename, tags, and viewCount)
+let uploadedFiles = []; 
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Multer setup for file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -53,7 +51,6 @@ const upload = multer({ storage });
 
 const findUserByEmail = (email) => users.find((user) => user.email === email);
 
-// Middleware to authenticate JWT token
 const authenticateToken = (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1];
 
@@ -90,7 +87,7 @@ app.post("/upload", authenticateToken, upload.single("file"), (req, res) => {
     originalName: req.file.originalname,
     filePath: `/uploads/${req.file.filename}`,
     tags: [],
-    viewCount: 0,  // Initialize the view count to 0
+    viewCount: 0,
     shareableLink: `${req.protocol}://${req.get('host')}/uploads/share/${req.file.filename}`,
   };
 
@@ -99,41 +96,37 @@ app.post("/upload", authenticateToken, upload.single("file"), (req, res) => {
   res.json({ message: "File uploaded successfully", file: req.file, shareableLink: fileData.shareableLink });
 });
 
-// Add tags to a file
 app.post("/add-tags", authenticateToken, (req, res) => {
   const { filename, tags } = req.body;
 
   const file = uploadedFiles.find((file) => file.filename === filename);
   if (!file) return res.status(400).json({ message: "File not found" });
 
-  file.tags = tags; // Add the provided tags to the file
+  file.tags = tags; 
   res.json({ message: "Tags added successfully", file });
 });
 
-// Get the list of uploaded files
 app.get("/uploads", authenticateToken, (req, res) => {
-  res.json(uploadedFiles); // Return all uploaded files with metadata
+  res.json(uploadedFiles); 
 });
 
-// Serve uploaded file from the server with view count increment
 app.get("/uploads/:filename", (req, res) => {
   const filePath = path.join(__dirname, "uploads", req.params.filename);
   const file = uploadedFiles.find((f) => f.filename === req.params.filename);
 
   if (file) {
-    file.viewCount += 1;  // Increment view count each time file is accessed
+    file.viewCount += 1; 
     res.sendFile(filePath);
   } else {
     res.status(404).json({ message: "File not found" });
   }
 });
 
-// Shareable link route - allows non-logged-in users to view the file
 app.get("/uploads/share/:filename", (req, res) => {
   const file = uploadedFiles.find((f) => f.filename === req.params.filename);
 
   if (file) {
-    file.viewCount += 1;  // Increment view count
+    file.viewCount += 1; 
     const filePath = path.join(__dirname, "uploads", req.params.filename);
     res.sendFile(filePath);
   } else {
@@ -141,7 +134,6 @@ app.get("/uploads/share/:filename", (req, res) => {
   }
 });
 
-// Get statistics for a file
 app.get("/uploads/stats/:filename", (req, res) => {
   const file = uploadedFiles.find((f) => f.filename === req.params.filename);
 
@@ -157,7 +149,6 @@ app.get("/uploads/stats/:filename", (req, res) => {
   }
 });
 
-// Start the server after initializing users
 (async () => {
   users = await initializeUsers();
 

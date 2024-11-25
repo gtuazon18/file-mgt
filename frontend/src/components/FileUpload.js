@@ -40,7 +40,7 @@ const FileUpload = () => {
     setUploading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/upload", formData, {
+      const res = await axios.post(process.env.REACT_APP_API_BASE_URL + "/upload", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -63,7 +63,7 @@ const FileUpload = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/add-tags",
+        `${process.env.REACT_APP_API_BASE_URL}/add-tags`,
         { filename, tags: tags.split(",") },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -81,7 +81,7 @@ const FileUpload = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get("http://localhost:5000/uploads", {
+      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/uploads`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUploadedFiles(res.data);

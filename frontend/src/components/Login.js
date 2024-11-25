@@ -9,15 +9,14 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Use Material-UI's useMediaQuery to handle responsive design
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery('(max-width:400px)');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/login', { email, password });
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/login`, { email, password });
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('role', res.data.role); // Store user role
+      localStorage.setItem('role', res.data.role); 
       if (res.data.role === 'admin') {
         navigate('/admin-dashboard');
       } else {
@@ -38,7 +37,6 @@ const Login = () => {
       bgcolor="#f5f5f5"
       p={3}
     >
-      {/* Grid container for responsive form */}
       <Grid container justifyContent="center">
         <Grid item xs={10} sm={8} md={6} lg={4}>
           <Box
@@ -48,7 +46,6 @@ const Login = () => {
             borderRadius={2}
             width="100%"
           >
-            {/* Title that scales on different screen sizes */}
             <Typography 
               variant={isMobile ? 'h5' : 'h4'} 
               component="h1" 
@@ -58,10 +55,8 @@ const Login = () => {
               Login
             </Typography>
             
-            {/* Show error alert if any */}
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
             
-            {/* Login Form */}
             <form onSubmit={handleSubmit}>
               <TextField
                 label="Email"

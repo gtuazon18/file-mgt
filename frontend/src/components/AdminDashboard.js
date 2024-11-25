@@ -13,7 +13,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get("http://localhost:5000/uploads", {
+      const res = await axios.get(process.env.REACT_APP_API_BASE_URL + "/uploads", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFiles(res.data);
@@ -26,7 +26,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("token");
 
     try {
-      await axios.delete(`http://localhost:5000/uploads/${filename}`, {
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/uploads/${filename}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("File deleted successfully!");

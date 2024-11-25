@@ -21,7 +21,7 @@ const Header = () => {
   };
 
   const menuItems = [
-    { text: 'Home', link: '/' },
+    { text: 'Home', link: '/home' },
     { text: 'Upload', link: '/upload' },
     { text: 'Admin Dashboard', link: '/admin-dashboard', role: 'admin' },
   ];
