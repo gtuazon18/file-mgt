@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/6f38694d-cb3b-41b8-ad8e-c441681d1fba)# File Management Web Application
+# File Management Web Application
 
 This is a web application for secure user login and multimedia file management. The project is divided into two parts:
 
