@@ -33,7 +33,7 @@ const Login = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      minHeight="100vh"
+      minHeight="80vh"
       bgcolor="#f5f5f5"
       p={3}
     >
