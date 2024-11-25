@@ -97,13 +97,23 @@ const FileUpload = () => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const copyLinkToClipboard = (link) => {
-    navigator.clipboard.writeText(link)
+    navigator.clipboard?.writeText(link)
       .then(() => {
         alert("Link copied to clipboard!");
       })
       .catch((error) => {
-        alert("Failed to copy the link.");
+        fallbackCopy(link);
       });
+  };
+  
+  const fallbackCopy = (link) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = link;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert("Link copied to clipboard!");
   };
 
   return (
