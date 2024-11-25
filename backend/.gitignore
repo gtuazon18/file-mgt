@@ -1,0 +1,8 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Uploads folder (for file storage)
+uploads/
