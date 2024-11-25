@@ -121,6 +121,18 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
       res.status(500).json({ message: "Database error" });
     }
   });
+
+app.get("/uploads/share/:filename", (req, res) => {
+const file = uploadedFiles.find((f) => f.filename === req.params.filename);
+
+if (file) {
+    file.viewCount += 1; 
+    const filePath = path.join(__dirname, "uploads", req.params.filename);
+    res.sendFile(filePath);
+} else {
+    res.status(404).json({ message: "File not found" });
+}
+});
   
 
 app.post("/add-tags", authenticateToken, async (req, res) => {
