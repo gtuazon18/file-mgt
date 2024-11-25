@@ -95,29 +95,33 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/upload", authenticateToken, upload.single("file"), async (req, res) => {
-  if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-
-  const fileData = {
-    filename: req.file.filename,
-    originalName: req.file.originalname,
-    filePath: `/uploads/${req.file.filename}`,
-    tags: null,
-    viewCount: 0,
-    shareableLink: `${req.protocol}://${req.get('host')}/uploads/share/${req.file.filename}`,
-  };
-
-  try {
-    await db.query(
-      "INSERT INTO files (filename, original_name, file_path, shareable_link) VALUES (?, ?, ?, ?)",
-      [fileData.filename, fileData.originalName, fileData.filePath, fileData.shareableLink]
-    );
-
-    res.json({ message: "File uploaded successfully", file: fileData });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Database error" });
-  }
-});
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+  
+    const userId = req.user.id;
+  
+    const fileData = {
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      filePath: `/uploads/${req.file.filename}`,
+      tags: null,
+      viewCount: 0,
+      shareableLink: `${req.protocol}://${req.get('host')}/uploads/share/${req.file.filename}`,
+      userId, 
+    };
+  
+    try {
+      await db.execute(
+        "INSERT INTO files (filename, original_name, file_path, shareable_link, user_id) VALUES (?, ?, ?, ?, ?)",
+        [fileData.filename, fileData.originalName, fileData.filePath, fileData.shareableLink, fileData.userId]
+      );
+  
+      res.json({ message: "File uploaded successfully", file: fileData });
+    } catch (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: "Database error" });
+    }
+  });
+  
 
 app.post("/add-tags", authenticateToken, async (req, res) => {
   const { filename, tags } = req.body;

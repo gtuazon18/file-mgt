@@ -96,6 +96,16 @@ const FileUpload = () => {
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
+  const copyLinkToClipboard = (link) => {
+    navigator.clipboard.writeText(link)
+      .then(() => {
+        alert("Link copied to clipboard!");
+      })
+      .catch((error) => {
+        alert("Failed to copy the link.");
+      });
+  };
+
   return (
     <Box
       display="flex"
@@ -167,15 +177,15 @@ const FileUpload = () => {
             <TableBody>
               {uploadedFiles.map((file) => (
                 <TableRow key={file.filename}>
-                  <TableCell>{file.originalName}</TableCell>
-                  <TableCell>{file.tags.join(", ")}</TableCell>
+                  <TableCell>{file.original_name}</TableCell>
+                  <TableCell>{file.tags}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
                       size="small"
-                      onClick={() => alert(`Shareable link: ${file.shareableLink}`)}
+                      onClick={() => copyLinkToClipboard(file.shareable_link)}
                     >
-                      Share Link
+                      Copy Link
                     </Button>
                   </TableCell>
                   <TableCell>

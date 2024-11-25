@@ -6,6 +6,7 @@ import Login from './components/Login';
 import FileUpload from './components/FileUpload';
 import AdminDashboard from './components/AdminDashboard';
 import RegisterPage from './components/Registration';
+import Home from './components/Home';
 import { Box } from '@mui/material';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Header />
       <Box sx={{ minHeight: '80vh' }}>
         <Routes>
+          <Route path="/home" element={<Home />} />
           <Route path="/" element={<Login />} />
           <Route path="/upload" element={<FileUpload />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
