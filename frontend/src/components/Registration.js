@@ -9,8 +9,11 @@ import {
   Alert,
   Paper,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -44,6 +47,7 @@ const Registration = () => {
       setSuccess("Registration successful!");
       setError("");
       setFormData({ email: "", password: "", confirmPassword: "" });
+      navigate("/");
     } catch (err) {
       setError("An error occurred. Please try again.");
       setSuccess("");
