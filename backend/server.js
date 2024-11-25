@@ -11,6 +11,7 @@ const dotenv = require("dotenv");
 const db = require('./db');
 dotenv.config();
 
+let uploadedFiles = [];
 
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
