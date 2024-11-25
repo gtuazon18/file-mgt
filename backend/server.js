@@ -115,6 +115,8 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
         "INSERT INTO files (filename, original_name, file_path, shareable_link, user_id) VALUES (?, ?, ?, ?, ?)",
         [fileData.filename, fileData.originalName, fileData.filePath, fileData.shareableLink, fileData.userId]
       );
+
+      uploadedFiles.push(fileData);
   
       res.json({ message: "File uploaded successfully", file: fileData });
     } catch (err) {
