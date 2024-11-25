@@ -42,17 +42,8 @@ cd ../frontend
 npm install
 ```
 
-## User Access
+## Register and Login
 
-```bash
-Admin
-username: admin@example.com
-password: password123
-
-User
-username: user@example.com
-password: user123
-```
 
 Screenshots
 Login and Registration
