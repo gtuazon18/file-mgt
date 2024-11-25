@@ -128,7 +128,7 @@ app.get("/uploads/:filename", (req, res) => {
 
   if (file) {
     file.viewCount += 1; 
-    const filePath = path.join(__dirname, "uploads", req.params.filename);
+    const filePath = path.join("/var/www/file-mgt/backend/uploads", req.params.filename);
     res.sendFile(filePath);
   } else {
     res.status(404).json({ message: "File not found" });
