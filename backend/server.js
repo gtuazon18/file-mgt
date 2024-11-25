@@ -106,7 +106,7 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
       filePath: `/uploads/${req.file.filename}`,
       tags: null,
       viewCount: 0,
-      shareableLink: `${req.protocol}://${req.get('host')}/uploads/share/${req.file.filename}`,
+      shareableLink: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`,
       userId, 
     };
   
