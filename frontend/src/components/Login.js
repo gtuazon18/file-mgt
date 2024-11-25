@@ -69,7 +69,7 @@ const Login = () => {
   return (
     <LoginContainer>
       <BackgroundImage>
-        <img src="https://picsum.photos/1920/1080" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src="https://picsum.photos/1920/1080" alt="random background"style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </BackgroundImage>
       <Grid container justifyContent="center">
         <Grid item xs={12} sm={10} md={8} lg={6}>
