@@ -44,7 +44,6 @@ const Login = () => {
             bgcolor="white"
             boxShadow={3}
             borderRadius={2}
-            width="100%"
           >
             <Typography 
               variant={isMobile ? 'h5' : 'h4'} 
