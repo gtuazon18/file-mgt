@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import FileUpload from './components/FileUpload';
 import AdminDashboard from './components/AdminDashboard';
+import RegisterPage from './components/Registration';
 import { Box } from '@mui/material';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/upload" element={<FileUpload />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </Box>
       <Footer />

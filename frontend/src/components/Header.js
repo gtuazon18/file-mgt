@@ -37,14 +37,23 @@ const Header = () => {
 
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {token ? (
-            <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link to="/home" style={{ color: 'white', textDecoration: 'none' }}>
               <HomeIcon sx={{ fontSize: 30, marginRight: 1 }} />
               Home
             </Link>
           ) : (
-            <Typography variant="h6">File Management</Typography>
+            
+            <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+             <Typography variant="h6">File Management</Typography>
+            </Link>
           )}
         </Typography>
+
+        {!token && (
+          <Button color="inherit" onClick={() => navigate('/register')}>
+            Register
+          </Button>
+        )}
 
         {token && role !== 'admin' && (
           <Button
