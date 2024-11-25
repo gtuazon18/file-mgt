@@ -67,6 +67,10 @@ User
 ![image](https://github.com/user-attachments/assets/f96ef316-fec8-4467-aa81-b95eb5e9566f)
 ![image](https://github.com/user-attachments/assets/99d4ef44-3d75-45cd-bd2f-40221e61b412)
 
+Sharable Link Can View Even not logging in
+![image](https://github.com/user-attachments/assets/2b721811-453a-4bd5-ae1f-9f759082ce98)
+
+
 Admin
 ![image](https://github.com/user-attachments/assets/61c5ce04-cce9-4ef7-92b6-2a7895ec5c3d)
 
