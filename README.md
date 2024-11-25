@@ -30,7 +30,6 @@ git clone git@github.com:gtuazon18/file-mgt.git
 ### Navigate to the backend folder and install the dependencies:
 
 ```bash
-Copy code
 cd backend
 npm install
 ```
@@ -39,7 +38,6 @@ npm install
 Navigate to the frontend folder and install the dependencies:
 
 ```bash
-Copy code
 cd ../frontend
 npm install
 ```
