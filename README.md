@@ -55,7 +55,10 @@ password: user123
 ```
 
 Screenshots
+Login
 ![image](https://github.com/user-attachments/assets/ef40714d-11be-45e3-9170-406c6e92dc12)
+
+User
 ![image](https://github.com/user-attachments/assets/d41a66db-9ad1-484d-b24f-233cf61c867c)
 ![image](https://github.com/user-attachments/assets/fc128850-514b-4840-ad17-2b468e083386)
 ![image](https://github.com/user-attachments/assets/95bee4ac-d05d-4b01-846b-f37cff60291b)
@@ -64,7 +67,8 @@ Screenshots
 ![image](https://github.com/user-attachments/assets/f96ef316-fec8-4467-aa81-b95eb5e9566f)
 ![image](https://github.com/user-attachments/assets/99d4ef44-3d75-45cd-bd2f-40221e61b412)
 
-
+Admin
+![image](https://github.com/user-attachments/assets/61c5ce04-cce9-4ef7-92b6-2a7895ec5c3d)
 
 
 
