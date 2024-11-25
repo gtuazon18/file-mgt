@@ -123,16 +123,16 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
     }
   });
 
-app.get("/uploads/share/:filename", (req, res) => {
-const file = uploadedFiles.find((f) => f.filename === req.params.filename);
+app.get("/uploads/:filename", (req, res) => {
+  const file = uploadedFiles.find((f) => f.filename === req.params.filename);
 
-if (file) {
+  if (file) {
     file.viewCount += 1; 
     const filePath = path.join(__dirname, "uploads", req.params.filename);
     res.sendFile(filePath);
-} else {
+  } else {
     res.status(404).json({ message: "File not found" });
-}
+  }
 });
   
 
