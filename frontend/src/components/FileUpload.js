@@ -173,12 +173,12 @@ const FileUpload = () => {
         )}
       </Paper>
 
-      {/* File input fallback for browsers where drag-and-drop might not work */}
+      {/* This will only trigger when clicking the paper area, not when dragging */}
       <input
         type="file"
         onChange={handleFileChange}
         style={{ display: "none" }}
-        ref={(input) => (input ? input.click() : null)} // Auto-click input for file selection
+        ref={(input) => input && input.addEventListener("click", (e) => e.stopPropagation())} // Stop bubbling when file input is clicked
       />
 
       {/* Display selected file and upload button */}
