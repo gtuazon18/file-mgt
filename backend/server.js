@@ -132,7 +132,7 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
       const updatedFile = { ...file, viewCount: file.viewCount + 1 };
       
       db.query(
-        "UPDATE uploads SET viewCount = ? WHERE filename = ?",
+        "UPDATE files SET viewCount = ? WHERE filename = ?",
         [updatedFile.viewCount, req.params.filename],
         (err, result) => {
           if (err) {
