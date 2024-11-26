@@ -164,6 +164,27 @@ app.get("/uploads", authenticateToken, async (req, res) => {
   }
 });
 
+app.delete("/uploads/:filename", async (req, res) => {
+  const { filename } = req.params;
+
+  try {
+    await db.query("DELETE FROM files WHERE filename = ?", [filename]);
+
+    const filePath = path.join(__dirname, "uploads", filename);
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error("Error deleting file from file system", err);
+        return res.status(500).json({ message: "Failed to delete file from file system" });
+      }
+    });
+
+    res.status(200).json({ message: "File deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting file from database", error);
+    res.status(500).json({ message: "Error deleting file" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

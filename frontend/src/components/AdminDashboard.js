@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Typography, Button, Paper, Table, TableHead, TableBody, TableCell, TableRow } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Table,
+  TableContainer,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  CircularProgress,
+} from "@mui/material";
 
 const AdminDashboard = () => {
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false); // For initial fetch
 
   useEffect(() => {
     fetchFiles();
@@ -11,7 +25,7 @@ const AdminDashboard = () => {
 
   const fetchFiles = async () => {
     const token = localStorage.getItem("token");
-
+    setFetching(true);
     try {
       const res = await axios.get(process.env.REACT_APP_API_BASE_URL + "/uploads", {
         headers: { Authorization: `Bearer ${token}` },
@@ -19,50 +33,87 @@ const AdminDashboard = () => {
       setFiles(res.data);
     } catch (error) {
       alert("Error fetching files");
+    } finally {
+      setFetching(false);
     }
   };
 
   const deleteFile = async (filename) => {
+    if (!window.confirm(`Are you sure you want to delete ${filename}?`)) {
+      return;
+    }
+
     const token = localStorage.getItem("token");
+    setLoading(true);
 
     try {
-        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/uploads/${filename}`, {
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/uploads/${filename}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("File deleted successfully!");
-      fetchFiles();
+      fetchFiles(); 
     } catch (error) {
-      alert("Error deleting file");
+      console.error(error.response || error);
+      alert(
+        error.response?.data?.message || "An error occurred while deleting the file"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Admin Dashboard</Typography>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Filename</TableCell>
-              <TableCell>Tags</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {files.map((file) => (
-              <TableRow key={file.filename}>
-                <TableCell>{file.original_name}</TableCell>
-                <TableCell>{file.tags}</TableCell>
-                <TableCell>
-                  <Button color="secondary" onClick={() => deleteFile(file.filename)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
+      <Typography variant="h4" gutterBottom>
+        Admin Dashboard
+      </Typography>
+
+      {fetching ? (
+        <Box display="flex" justifyContent="center" my={3}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Filename</TableCell>
+                  <TableCell>Tags</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {files.length > 0 ? (
+                  files.map((file) => (
+                    <TableRow key={file.filename}>
+                      <TableCell>{file.original_name}</TableCell>
+                      <TableCell>{file.tags}</TableCell>
+                      <TableCell>
+                        <Button
+                          color="secondary"
+                          onClick={() => deleteFile(file.filename)}
+                          disabled={loading} // Disable button during loading
+                        >
+                          {loading ? "Deleting..." : "Delete"}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3} align="center">
+                      <Typography variant="body1" color="textSecondary">
+                        No files available.
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      )}
     </Box>
   );
 };
