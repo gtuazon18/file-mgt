@@ -27,6 +27,21 @@ const FileUpload = () => {
     setFile(acceptedFiles[0]);
   };
 
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+  } = useDropzone({
+    onDrop,
+    accept: "", // Allow all file types
+    onDragOver: () => {
+      // Handle drag over event
+    },
+    onDragLeave: () => {
+      // Handle drag leave event
+    },
+  });
+
   const uploadFile = async () => {
     if (!file) {
       alert("Please select a file before uploading.");
@@ -94,8 +109,6 @@ const FileUpload = () => {
     fetchUploadedFiles();
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
   const copyLinkToClipboard = (link) => {
     const textArea = document.createElement("textarea");
     textArea.value = link;
@@ -105,7 +118,7 @@ const FileUpload = () => {
     document.body.removeChild(textArea);
     alert("Link copied to clipboard!");
   };
-  
+
   return (
     <Box
       display="flex"
@@ -133,10 +146,18 @@ const FileUpload = () => {
         }}
       >
         <input {...getInputProps()} />
-        <UploadFileIcon sx={{ fontSize: 50, color: "#757575" }} />
-        <Typography variant="body1" mt={2}>
-          Drag & drop a file here, or click to select one
-        </Typography>
+        {isDragActive ? (
+          <Typography variant="body1" color="primary">
+            Drop the file here ...
+          </Typography>
+        ) : (
+          <React.Fragment>
+            <UploadFileIcon sx={{ fontSize: 50, color: "#757575" }} />
+            <Typography variant="body1" mt={2}>
+              Drag & drop a file here, or click to select one
+            </Typography>
+          </React.Fragment>
+        )}
       </Paper>
 
       {file && (
@@ -170,7 +191,7 @@ const FileUpload = () => {
               <TableRow>
                 <TableCell>Filename</TableCell>
                 <TableCell>Tags</TableCell>
-                <TableCell>View Count</TableCell> {/* New column */}
+                <TableCell>View Count</TableCell>
                 <TableCell>Shareable Link</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -180,7 +201,7 @@ const FileUpload = () => {
                 <TableRow key={file.filename}>
                   <TableCell>{file.original_name}</TableCell>
                   <TableCell>{file.tags}</TableCell>
-                  <TableCell>{file.viewCount}</TableCell> {/* Display view count */}
+                  <TableCell>{file.viewCount}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
@@ -213,7 +234,6 @@ const FileUpload = () => {
               ))}
             </TableBody>
           </Table>
-
         </TableContainer>
       ) : (
         <Typography variant="body1" color="textSecondary">
