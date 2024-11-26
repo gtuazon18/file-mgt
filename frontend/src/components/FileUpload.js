@@ -24,7 +24,11 @@ const FileUpload = () => {
   const [tags, setTags] = useState("");
 
   const onDrop = (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      setFile(acceptedFiles[0]);
+    } else {
+      alert("No files dropped.");
+    }
   };
 
   const {
@@ -33,12 +37,12 @@ const FileUpload = () => {
     isDragActive,
   } = useDropzone({
     onDrop,
-    accept: "", // Allow all file types
-    onDragOver: () => {
-      // Handle drag over event
+    accept: "", 
+    onDragOver: (e) => {
+      e.preventDefault(); 
     },
-    onDragLeave: () => {
-      // Handle drag leave event
+    onDragLeave: (e) => {
+      e.preventDefault(); 
     },
   });
 
@@ -119,6 +123,19 @@ const FileUpload = () => {
     alert("Link copied to clipboard!");
   };
 
+  // Native drag-and-drop fallback (if necessary for debugging)
+  const onNativeDragOver = (e) => {
+    e.preventDefault(); // Prevent default behavior
+  };
+
+  const onNativeDrop = (e) => {
+    e.preventDefault();
+    const droppedFiles = e.dataTransfer.files;
+    if (droppedFiles.length > 0) {
+      setFile(droppedFiles[0]);
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -131,6 +148,7 @@ const FileUpload = () => {
         File Upload
       </Typography>
 
+      {/* Paper with Dropzone */}
       <Paper
         {...getRootProps()}
         elevation={3}
@@ -160,6 +178,7 @@ const FileUpload = () => {
         )}
       </Paper>
 
+      {/* Display selected file and upload button */}
       {file && (
         <Box mt={3} textAlign="center">
           <Typography variant="body1" gutterBottom>
@@ -180,6 +199,7 @@ const FileUpload = () => {
         </Box>
       )}
 
+      {/* Uploaded Files Table */}
       <Typography variant="h5" mt={5} gutterBottom>
         Uploaded Files
       </Typography>
