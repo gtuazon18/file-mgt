@@ -49,8 +49,6 @@ Screenshots
 Login and Registration
 ![image](https://github.com/user-attachments/assets/e987602f-9192-476d-bbd6-38fa82e262c8)
 
-![image](https://github.com/user-attachments/assets/778deb96-f8e0-4481-8a18-7f4a36bf52e7)
-
 
 User
 ![image](https://github.com/user-attachments/assets/d41a66db-9ad1-484d-b24f-233cf61c867c)
