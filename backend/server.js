@@ -9,6 +9,7 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const dotenv = require("dotenv");
 const db = require('./db');
+const serverless = require('serverless-http');
 dotenv.config();
 
 let uploadedFiles = [];
