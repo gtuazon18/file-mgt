@@ -126,27 +126,37 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
   });
 
   app.get("/uploads/:filename", (req, res) => {
-    const file = uploadedFiles.find((f) => f.filename === req.params.filename);
+    const filename = req.params.filename;
   
-    if (file) {
-      const updatedFile = { ...file, viewCount: file.viewCount + 1 };
-      
+    db.query("SELECT * FROM files WHERE filename = ?", [filename], (err, result) => {
+      if (err) {
+        console.log("Error querying database:", err);
+        return res.status(500).json({ message: "Database error" });
+      }
+  
+      if (result.length === 0) {
+        return res.status(404).json({ message: "File not found" });
+      }
+  
+      const file = result[0];
+      const updatedViewCount = file.viewCount + 1;
+  
       db.query(
         "UPDATE files SET viewCount = ? WHERE filename = ?",
-        [updatedFile.viewCount, req.params.filename],
-        (err, result) => {
+        [updatedViewCount, filename],
+        (err, updateResult) => {
           if (err) {
             console.log("Error updating view count:", err);
+            return res.status(500).json({ message: "Error updating view count" });
           }
+          
+          const filePath = path.join(__dirname, "uploads", filename);
+          res.sendFile(filePath);
         }
       );
-  
-      const filePath = path.join(__dirname, "uploads", req.params.filename);
-      res.sendFile(filePath);
-    } else {
-      res.status(404).json({ message: "File not found" });
-    }
+    });
   });
+  
   
 
 app.post("/add-tags", authenticateToken, async (req, res) => {

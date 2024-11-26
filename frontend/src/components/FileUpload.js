@@ -170,6 +170,7 @@ const FileUpload = () => {
               <TableRow>
                 <TableCell>Filename</TableCell>
                 <TableCell>Tags</TableCell>
+                <TableCell>View Count</TableCell> {/* New column */}
                 <TableCell>Shareable Link</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -179,6 +180,7 @@ const FileUpload = () => {
                 <TableRow key={file.filename}>
                   <TableCell>{file.original_name}</TableCell>
                   <TableCell>{file.tags}</TableCell>
+                  <TableCell>{file.viewCount}</TableCell> {/* Display view count */}
                   <TableCell>
                     <Button
                       variant="outlined"
@@ -211,6 +213,7 @@ const FileUpload = () => {
               ))}
             </TableBody>
           </Table>
+
         </TableContainer>
       ) : (
         <Typography variant="body1" color="textSecondary">
