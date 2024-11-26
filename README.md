@@ -61,7 +61,10 @@ User
 ![image](https://github.com/user-attachments/assets/99d4ef44-3d75-45cd-bd2f-40221e61b412)
 
 Sharable Link Can View Even not logging in
+Image
 ![image](https://github.com/user-attachments/assets/2b721811-453a-4bd5-ae1f-9f759082ce98)
+Video
+![image](https://github.com/user-attachments/assets/29c32925-06bf-4880-b23a-694cea5c86ef)
 
 
 Admin
