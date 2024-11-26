@@ -76,40 +76,28 @@ const AdminDashboard = () => {
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer>
             <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Filename</TableCell>
-                  <TableCell>Tags</TableCell>
-                  <TableCell>Actions</TableCell>
+            <TableHead>
+            <TableRow>
+              <TableCell>Filename</TableCell>
+              <TableCell>Tags</TableCell>
+              <TableCell>View Count</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+              {files.map((file) => (
+                <TableRow key={file.filename}>
+                  <TableCell>{file.original_name}</TableCell>
+                  <TableCell>{file.tags}</TableCell>
+                  <TableCell>{file.viewCount}</TableCell> {/* Display view count */}
+                  <TableCell>
+                    <Button color="secondary" onClick={() => deleteFile(file.filename)}>
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {files.length > 0 ? (
-                  files.map((file) => (
-                    <TableRow key={file.filename}>
-                      <TableCell>{file.original_name}</TableCell>
-                      <TableCell>{file.tags}</TableCell>
-                      <TableCell>
-                        <Button
-                          color="secondary"
-                          onClick={() => deleteFile(file.filename)}
-                          disabled={loading} // Disable button during loading
-                        >
-                          {loading ? "Deleting..." : "Delete"}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={3} align="center">
-                      <Typography variant="body1" color="textSecondary">
-                        No files available.
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
+              ))}
+            </TableBody>
             </Table>
           </TableContainer>
         </Paper>
