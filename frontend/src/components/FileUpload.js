@@ -22,6 +22,7 @@ const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [tags, setTags] = useState("");
+  const [isDraggingDelayed, setIsDraggingDelayed] = useState(false); // state to hold delayed drag state
   
   const onDrop = (acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
@@ -41,6 +42,18 @@ const FileUpload = () => {
     onDragOver: (e) => e.preventDefault(),
     onDragLeave: (e) => e.preventDefault(),
   });
+
+  // UseEffect to introduce a delay for drag state
+  useEffect(() => {
+    if (isDragActive) {
+      // Introduce a slight delay to update isDraggingDelayed
+      setTimeout(() => {
+        setIsDraggingDelayed(true);
+      }, 150); // 150ms delay before showing drag state
+    } else {
+      setIsDraggingDelayed(false); // Reset when dragging ends
+    }
+  }, [isDragActive]);
 
   const uploadFile = async () => {
     if (!file) {
@@ -159,7 +172,7 @@ const FileUpload = () => {
         }}
       >
         <input {...getInputProps()} />
-        {isDragActive ? (
+        {isDraggingDelayed ? (
           <Typography variant="body1" color="primary">
             Drop the file here ...
           </Typography>
