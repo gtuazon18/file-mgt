@@ -44,7 +44,7 @@ const AdminDashboard = () => {
     }
 
     const token = localStorage.getItem("token");
-    setLoading(true);
+    setLoading((prevLoading) => ({ ...prevLoading, [filename]: true }));
 
     try {
       await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/uploads/${filename}`, {
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
         error.response?.data?.message || "An error occurred while deleting the file"
       );
     } finally {
-      setLoading(false);
+      setLoading((prevLoading) => ({ ...prevLoading, [filename]: false }));
     }
   };
 
@@ -89,11 +89,15 @@ const AdminDashboard = () => {
                 <TableRow key={file.filename}>
                   <TableCell>{file.original_name}</TableCell>
                   <TableCell>{file.tags}</TableCell>
-                  <TableCell>{file.viewCount}</TableCell> {/* Display view count */}
+                  <TableCell>{file.viewCount}</TableCell> 
                   <TableCell>
-                    <Button color="secondary" onClick={() => deleteFile(file.filename)}>
-                      Delete
-                    </Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => deleteFile(file.filename)}
+                    disabled={loading[file.filename]} 
+                  >
+                    {loading[file.filename] ? "Deleting..." : "Delete"}
+                  </Button>
                   </TableCell>
                 </TableRow>
               ))}
