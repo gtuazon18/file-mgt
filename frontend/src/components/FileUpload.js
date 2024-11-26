@@ -24,12 +24,12 @@ const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [tags, setTags] = useState("");
-  const [previewFiles, setPreviewFiles] = useState([]); // Store files for preview
+  const [previewFiles, setPreviewFiles] = useState([]); 
   const [fileUploadSuccess, setFileUploadSuccess] = useState(false);
 
   const onDrop = (acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
-      setPreviewFiles((prevFiles) => [...prevFiles, ...acceptedFiles]); // Add dropped files to preview
+      setPreviewFiles((prevFiles) => [...prevFiles, ...acceptedFiles]); 
     } else {
       alert("No files dropped.");
     }
@@ -46,7 +46,6 @@ const FileUpload = () => {
     onDragLeave: (e) => e.preventDefault(),
   });
 
-  // Upload selected files
   const uploadFile = async () => {
     if (previewFiles.length === 0) {
       alert("Please select a file before uploading.");
@@ -55,7 +54,7 @@ const FileUpload = () => {
 
     const formData = new FormData();
     previewFiles.forEach((file) => {
-      formData.append("file", file); // Appends each file individually
+      formData.append("file", file); 
     });
 
     const token = localStorage.getItem("token");
@@ -73,7 +72,7 @@ const FileUpload = () => {
       if (res.data) {
         setFileUploadSuccess(true);
         alert("File uploaded successfully!");
-        fetchUploadedFiles(); // Fetch updated list of uploaded files
+        fetchUploadedFiles(); 
       } else {
         alert("File upload failed. Please try again.");
       }
@@ -85,7 +84,6 @@ const FileUpload = () => {
     }
   };
 
-  // Fetch uploaded files
   const fetchUploadedFiles = async () => {
     const token = localStorage.getItem("token");
 
@@ -99,7 +97,6 @@ const FileUpload = () => {
     }
   };
 
-  // Handle adding tags to uploaded files
   const addTags = async (filename) => {
     const token = localStorage.getItem("token");
 
@@ -119,7 +116,6 @@ const FileUpload = () => {
     }
   };
 
-  // Handle copying file shareable link to clipboard
   const copyLinkToClipboard = (link) => {
     const textArea = document.createElement("textarea");
     textArea.value = link;
@@ -222,14 +218,12 @@ const FileUpload = () => {
         </Box>
       )}
 
-      {/* Show LinearProgress while uploading */}
       {uploading && (
         <Box sx={{ width: "100%", mt: 3 }}>
           <LinearProgress />
         </Box>
       )}
 
-      {/* Display selected file details */}
       {!previewFiles.length && !fileUploadSuccess && (
         <Box mt={3} textAlign="center">
           <Typography variant="body1" gutterBottom>
@@ -238,7 +232,6 @@ const FileUpload = () => {
         </Box>
       )}
 
-      {/* Display uploaded files */}
       <Typography
         variant="h5"
         mt={5}
