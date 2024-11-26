@@ -52,7 +52,7 @@ const AdminDashboard = () => {
             {files.map((file) => (
               <TableRow key={file.filename}>
                 <TableCell>{file.originalName}</TableCell>
-                <TableCell>{file.tags.join(", ")}</TableCell>
+                <TableCell>{file.tags}</TableCell>
                 <TableCell>
                   <Button color="secondary" onClick={() => deleteFile(file.filename)}>
                     Delete
