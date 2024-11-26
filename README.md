@@ -71,7 +71,8 @@ Video
 Admin
 Can delete and Check View Count
 ![image](https://github.com/user-attachments/assets/3a43fcf7-584c-4cf5-a78d-c125089c9bff)
-
+![image](https://github.com/user-attachments/assets/09d1faea-cc55-41c0-9c9f-1fef76c234b2)
+![image](https://github.com/user-attachments/assets/27069c7c-2a45-467e-9d79-b028b92305a3)
 
 
 
