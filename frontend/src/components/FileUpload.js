@@ -22,7 +22,7 @@ const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [tags, setTags] = useState("");
-
+  
   const onDrop = (acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
@@ -37,13 +37,9 @@ const FileUpload = () => {
     isDragActive,
   } = useDropzone({
     onDrop,
-    accept: "", 
-    onDragOver: (e) => {
-      e.preventDefault(); 
-    },
-    onDragLeave: (e) => {
-      e.preventDefault(); 
-    },
+    accept: "",
+    onDragOver: (e) => e.preventDefault(),
+    onDragLeave: (e) => e.preventDefault(),
   });
 
   const uploadFile = async () => {
@@ -59,9 +55,13 @@ const FileUpload = () => {
     setUploading(true);
 
     try {
-      const res = await axios.post(process.env.REACT_APP_API_BASE_URL + "/upload", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        process.env.REACT_APP_API_BASE_URL + "/upload",
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (res.data) {
         alert("File uploaded successfully!");
@@ -123,16 +123,11 @@ const FileUpload = () => {
     alert("Link copied to clipboard!");
   };
 
-  // Native drag-and-drop fallback (if necessary for debugging)
-  const onNativeDragOver = (e) => {
-    e.preventDefault(); // Prevent default behavior
-  };
-
-  const onNativeDrop = (e) => {
-    e.preventDefault();
-    const droppedFiles = e.dataTransfer.files;
-    if (droppedFiles.length > 0) {
-      setFile(droppedFiles[0]);
+  // Fallback to native file input when drag-and-drop doesn't work
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
     }
   };
 
@@ -177,6 +172,14 @@ const FileUpload = () => {
           </React.Fragment>
         )}
       </Paper>
+
+      {/* File input fallback for browsers where drag-and-drop might not work */}
+      <input
+        type="file"
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+        ref={(input) => (input ? input.click() : null)} // Auto-click input for file selection
+      />
 
       {/* Display selected file and upload button */}
       {file && (
