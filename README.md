@@ -59,6 +59,8 @@ User
 ![image](https://github.com/user-attachments/assets/ec4b1491-edb4-4f66-93b9-97177a61bffd)
 ![image](https://github.com/user-attachments/assets/e689d613-fce7-4604-8b50-4acdfd6c5805)
 ![image](https://github.com/user-attachments/assets/99d4ef44-3d75-45cd-bd2f-40221e61b412)
+With View Count
+![image](https://github.com/user-attachments/assets/0e6453aa-5e4a-4747-8a59-ef6ab361e408)
 
 Sharable Link Can View Even not logging in
 Image
@@ -68,7 +70,9 @@ Video
 
 
 Admin
-![image](https://github.com/user-attachments/assets/61c5ce04-cce9-4ef7-92b6-2a7895ec5c3d)
+Can delete and Check View Count
+![image](https://github.com/user-attachments/assets/3a43fcf7-584c-4cf5-a78d-c125089c9bff)
+
 
 
 
