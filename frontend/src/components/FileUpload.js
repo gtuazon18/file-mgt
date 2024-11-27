@@ -145,20 +145,22 @@ const FileUpload = () => {
         onDragOver={() => {}}
         onDragLeave={() => {}}
         style={{
-          border: "10px dotted black", 
-          borderRadius: "2000px", 
-          padding: "40px", 
-          backgroundColor: "#f0f0f0", 
-          textAlign: "center", 
-          cursor: "pointer", 
-          boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)", 
-          transition: "border-color 0.3s ease", 
-          position: "relative",
+          border: "10px dotted black", // Dotted black border for drag area
+          borderRadius: "20px", // Slightly rounded corners
+          padding: "60px", // Increased padding to make the area larger
+          backgroundColor: "#f9f9f9", // Lighter background color
+          textAlign: "center", // Centered text and content
+          cursor: "pointer", // Pointer cursor to indicate interactivity
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // A subtle box shadow to make the area stand out
+          transition: "border-color 0.3s ease, background-color 0.3s ease", // Smooth transition effects
+          position: "relative", // Ensures proper positioning for the file drop area
+          width: "80%", // Set width to 80% for better responsiveness
+          maxWidth: "600px", // Ensures the drop area doesn't become too large
           "&:hover": {
-            borderColor: "#303f9f", 
-            backgroundColor: "#f0f0f0",
+            borderColor: "#303f9f", // Change border color on hover
+            backgroundColor: "#e8e8e8", // Slightly darker background on hover
           },
-          marginTop: "50px", 
+          marginTop: "50px", // Space above the drop area
         }}
       >
         <input
