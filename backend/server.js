@@ -141,7 +141,7 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
 
 
 
-app.get("/uploads/:filename", async (req, res) => {
+app.get("/uploads/:filename", async (req, res, next) => {
   const file = uploadedFiles.find((f) => f.filename === req.params.filename);
 
   if (file) {
@@ -167,7 +167,6 @@ app.get("/uploads/:filename", async (req, res) => {
         f.filename === req.params.filename ? updatedFile : f
       );
 
-      // Serve the file
       res.sendFile(filePath);
 
     } catch (err) {
@@ -175,10 +174,11 @@ app.get("/uploads/:filename", async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   } else {
-    res.status(404).json({ message: "File not found" });
+    next();
   }
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
   
   
