@@ -175,31 +175,34 @@ app.get("/uploads/:filename", (req, res) => {
   
   
 
-app.get("/get-file", async (req, res) => {
-  const { filename } = req.query;
+app.post("/add-tags", authenticateToken, async (req, res) => {
+  const { filename, tags } = req.body;
+
+  if (!filename || typeof filename !== "string" || filename.trim() === "") {
+    return res.status(400).json({ message: "Invalid filename" });
+  }
+
+  const updatedTags = (Array.isArray(tags) && tags.length > 0) ? tags.join(",") : null;
+
+  console.log('Updated tags:', updatedTags);
 
   try {
     const [file] = await db.query("SELECT * FROM files WHERE filename = ?", [filename]);
 
     if (file.length === 0) return res.status(400).json({ message: "File not found" });
 
-    const fileData = file[0];
+    const [result] = await db.query("UPDATE files SET tags = ? WHERE filename = ?", [updatedTags, filename]);
 
-    if (fileData.tags && typeof fileData.tags === "string") {
-      try {
-        fileData.tags = JSON.parse(fileData.tags);
-      } catch (err) {
-        console.error("Error parsing tags:", err);
-      }
+    if (result.affectedRows === 0) {
+      return res.status(400).json({ message: "No rows updated, file might not exist" });
     }
 
-    res.json(fileData);
+    res.json({ message: "Tags added successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Database error" });
   }
 });
-
 
 
 
