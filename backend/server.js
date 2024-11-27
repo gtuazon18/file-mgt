@@ -28,10 +28,13 @@ app.use(express.json());
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+    cb(null, uploadDir); 
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const timestamp = moment().format("YYYYMMDD_HHmmss");
+    const fileExtension = path.extname(file.originalname);
+    const newFilename = `${timestamp}_${file.fieldname}${fileExtension}`;
+    cb(null, newFilename); 
   },
 });
 
@@ -94,66 +97,65 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/upload", authenticateToken, upload.single("file"), async (req, res) => {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-  
-    const userId = req.user.id;
-  
-    const fileData = {
-      filename: req.file.filename,
-      originalName: req.file.originalname,
-      filePath: `/uploads/${req.file.filename}`,
-      tags: null,
-      viewCount: 0,
-      shareableLink: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`,
-      userId, 
-    };
-  
-    try {
-      await db.execute(
-        "INSERT INTO files (filename, original_name, file_path, shareable_link, user_id) VALUES (?, ?, ?, ?, ?)",
-        [fileData.filename, fileData.originalName, fileData.filePath, fileData.shareableLink, fileData.userId]
-      );
+  if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-      uploadedFiles.push(fileData);
+  const userId = req.user.id;
   
-      res.json({ message: "File uploaded successfully", file: fileData });
-    } catch (err) {
-      console.error('Database error:', err);
-      res.status(500).json({ message: "Database error" });
+  const fileData = {
+    filename: req.file.filename,  
+    originalName: req.file.originalname, 
+    filePath: `/uploads/${req.file.filename}`,  
+    tags: null,  
+    viewCount: 0,  
+    shareableLink: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`,
+    userId, 
+  };
+
+  try {
+    await db.execute(
+      "INSERT INTO files (filename, original_name, file_path, shareable_link, user_id) VALUES (?, ?, ?, ?, ?)",
+      [fileData.filename, fileData.originalName, fileData.filePath, fileData.shareableLink, fileData.userId]
+    );
+
+    // Respond with success
+    res.json({ message: "File uploaded successfully", file: fileData });
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).json({ message: "Database error" });
+  }
+});
+
+app.get("/uploads/:filename", (req, res) => {
+  const filename = req.params.filename;
+
+  db.query("SELECT * FROM files WHERE filename = ?", [filename], (err, result) => {
+    if (err) {
+      console.log("Error querying database:", err);
+      return res.status(500).json({ message: "Database error" });
     }
-  });
 
-  app.get("/uploads/:filename", (req, res) => {
-    const filename = req.params.filename;
-  
-    db.query("SELECT * FROM files WHERE filename = ?", [filename], (err, result) => {
-      if (err) {
-        console.log("Error querying database:", err);
-        return res.status(500).json({ message: "Database error" });
-      }
-  
-      if (result.length === 0) {
-        return res.status(404).json({ message: "File not found" });
-      }
-  
-      const file = result[0];
-      const updatedViewCount = file.viewCount + 1;
-  
-      db.query(
-        "UPDATE files SET viewCount = ? WHERE filename = ?",
-        [updatedViewCount, filename],
-        (err, updateResult) => {
-          if (err) {
-            console.log("Error updating view count:", err);
-            return res.status(500).json({ message: "Error updating view count" });
-          }
-          
-          const filePath = path.join(__dirname, "uploads", filename);
-          res.sendFile(filePath);
+    if (result.length === 0) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    const file = result[0];
+    const updatedViewCount = file.viewCount + 1;
+
+    db.query(
+      "UPDATE files SET viewCount = ? WHERE filename = ?",
+      [updatedViewCount, filename],
+      (err, updateResult) => {
+        if (err) {
+          console.log("Error updating view count:", err);
+          return res.status(500).json({ message: "Error updating view count" });
         }
-      );
-    });
+        
+        const filePath = path.join(__dirname, "uploads", filename);
+        res.sendFile(filePath);
+      }
+    );
   });
+});
   
   
 
