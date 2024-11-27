@@ -278,7 +278,7 @@ const FileUpload = () => {
                     <TextField
                       label="Add Tags"
                       value={fileTags[file.original_name] || ""}
-                      onChange={(e) => handleTagChange(e, file.original_name)}
+                      onChange={(e) => handleTagChange(e, file.filename)}
                       variant="outlined"
                       size="small"
                       sx={{ mr: 2 }}
@@ -286,7 +286,7 @@ const FileUpload = () => {
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={() => addTags(file.original_name)}
+                      onClick={() => addTags(file.filename)}
                     >
                       Add Tags
                     </Button>
