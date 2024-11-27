@@ -96,9 +96,10 @@ const FileUpload = () => {
   // Add tags to a specific file
   const addTags = async (filename) => {
     const token = localStorage.getItem("token");
-
+  
     try {
-      const tags = fileTags[filename]?.split(",") || [];
+      const tags = Array.isArray(fileTags[filename]) ? fileTags[filename] : (fileTags[filename]?.split(",") || []);
+  
       await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/add-tags`,
         { filename, tags },
@@ -106,12 +107,15 @@ const FileUpload = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+  
       alert("Tags added successfully!");
       fetchUploadedFiles();
     } catch (error) {
+      console.error("Error adding tags:", error);
       alert("Error adding tags");
     }
   };
+  
 
   const copyLinkToClipboard = (link) => {
     const textArea = document.createElement("textarea");
@@ -275,21 +279,21 @@ const FileUpload = () => {
                     </Button>
                   </TableCell>
                   <TableCell>
-                    <TextField
-                      label="Add Tags"
-                      value={fileTags[file.original_name] || ""}
-                      onChange={(e) => handleTagChange(e, file.original_name)}
-                      variant="outlined"
-                      size="small"
-                      sx={{ mr: 2 }}
-                    />
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => addTags(file.filename)}
-                    >
-                      Add Tags
-                    </Button>
+                  <TextField
+                    label="Add Tags"
+                    value={fileTags[file.original_name] || ""} 
+                    onChange={(e) => handleTagChange(e, file.original_name)} 
+                    variant="outlined"
+                    size="small"
+                    sx={{ mr: 2 }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => addTags(file.filename)} 
+                  >
+                    Add Tags
+                  </Button>
                   </TableCell>
                 </TableRow>
               ))}
