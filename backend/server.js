@@ -10,6 +10,7 @@ const multer = require("multer");
 const dotenv = require("dotenv");
 const db = require('./db');
 dotenv.config();
+const moment = require('moment');
 
 let uploadedFiles = [];
 
@@ -48,9 +49,11 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: 'Invalid token' });
     req.user = user;
+    console.log("Authenticated user:", req.user);  // Add logging here for debugging
     next();
   });
 };
+
 
 // Routes
 
@@ -100,30 +103,43 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
   if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
   const userId = req.user.id;
-  
-  const fileData = {
-    filename: req.file.filename,  
-    originalName: req.file.originalname, 
-    filePath: `/uploads/${req.file.filename}`,  
-    tags: null,  
-    viewCount: 0,  
-    shareableLink: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`,
-    userId, 
-  };
+
+  if (!userId) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
 
   try {
+    const [user] = await db.execute("SELECT * FROM users WHERE id = ?", [userId]);
+    if (!user) {
+      return res.status(404).json({ message: "User not found in the database" });
+    }
+
+    const fileData = {
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      filePath: `/uploads/${req.file.filename}`,
+      tags: null,
+      viewCount: 0,
+      shareableLink: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`,
+      userId,
+    };
+
     await db.execute(
       "INSERT INTO files (filename, original_name, file_path, shareable_link, user_id) VALUES (?, ?, ?, ?, ?)",
       [fileData.filename, fileData.originalName, fileData.filePath, fileData.shareableLink, fileData.userId]
     );
 
-    // Respond with success
+    uploadedFiles.push(fileData);
+
     res.json({ message: "File uploaded successfully", file: fileData });
+
   } catch (err) {
     console.error('Database error:', err);
     res.status(500).json({ message: "Database error" });
   }
 });
+
+
 
 app.get("/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
