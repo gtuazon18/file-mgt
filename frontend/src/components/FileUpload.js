@@ -22,11 +22,9 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [fileTags, setFileTags] = useState({});
+  const [currentTags, setCurrentTags] = useState({});
   const [previewFiles, setPreviewFiles] = useState([]);
   const [fileUploadSuccess, setFileUploadSuccess] = useState(false);
-  const [tags, setTags] = useState("");
-
   const onDrop = (files) => {
     if (files && files.length > 0) {
       setPreviewFiles((prevFiles) => [...prevFiles, ...files]);
@@ -94,18 +92,22 @@ const FileUpload = () => {
 
   const addTags = async (filename) => {
     const token = localStorage.getItem("token");
-  
+    const tags = currentTags[filename] ? currentTags[filename].split(",") : [];
+
     try {
       await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/add-tags`,
-        { filename, tags: tags.split(",") },
+        { filename, tags },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       alert("Tags added successfully!");
       fetchUploadedFiles();
-      setTags(""); 
+      setCurrentTags({
+        ...currentTags,
+        [filename]: '',
+      });
     } catch (error) {
       alert("Error adding tags");
     }
@@ -132,11 +134,12 @@ const FileUpload = () => {
   };
 
   const handleTagChange = (e, filename) => {
-    setFileTags({
-      ...fileTags,
+    setCurrentTags({
+      ...currentTags,
       [filename]: e.target.value,
     });
   };
+  
 
   useEffect(() => {
     fetchUploadedFiles();
@@ -274,9 +277,9 @@ const FileUpload = () => {
                   <TextField
                       label="Add Tags"
                       variant="outlined"
-                      onChange={(e) => setTags(e.target.value)}
                       size="small"
-                      value={tags }
+                      value={currentTags[file.filename] || ''}
+                      onChange={(e) => handleTagChange(e, file.filename)}
                       sx={{ mr: 2 }}
                     />
                     <Button
