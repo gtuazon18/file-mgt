@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useDropzone } from "react-dropzone";
+import { FileDrop } from "react-file-drop"; 
 import {
   Box,
   Button,
@@ -16,7 +16,6 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { IoMdCloseCircle } from "react-icons/io";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
@@ -24,27 +23,17 @@ const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [tags, setTags] = useState("");
-  const [previewFiles, setPreviewFiles] = useState([]); 
+  const [previewFiles, setPreviewFiles] = useState([]);
   const [fileUploadSuccess, setFileUploadSuccess] = useState(false);
 
-  const onDrop = (acceptedFiles) => {
-    if (acceptedFiles && acceptedFiles.length > 0) {
-      setPreviewFiles((prevFiles) => [...prevFiles, ...acceptedFiles]); 
+  // onDrop handler to update the preview files when files are dropped
+  const onDrop = (files) => {
+    if (files && files.length > 0) {
+      setPreviewFiles((prevFiles) => [...prevFiles, ...files]);
     } else {
       alert("No files dropped.");
     }
   };
-
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-  } = useDropzone({
-    onDrop,
-    accept: "*/*",
-    onDragOver: (e) => e.preventDefault(),
-    onDragLeave: (e) => e.preventDefault(),
-  });
 
   const uploadFile = async () => {
     if (previewFiles.length === 0) {
@@ -54,7 +43,7 @@ const FileUpload = () => {
 
     const formData = new FormData();
     previewFiles.forEach((file) => {
-      formData.append("file", file); 
+      formData.append("file", file);
     });
 
     const token = localStorage.getItem("token");
@@ -72,7 +61,7 @@ const FileUpload = () => {
       if (res.data) {
         setFileUploadSuccess(true);
         alert("File uploaded successfully!");
-        fetchUploadedFiles(); 
+        fetchUploadedFiles();
       } else {
         alert("File upload failed. Please try again.");
       }
@@ -150,37 +139,39 @@ const FileUpload = () => {
         File Upload
       </Typography>
 
-      <Box
-        {...getRootProps()}
-        sx={{
-          border: "2px dashed #3f51b5",
-          borderRadius: "10px",
-          padding: "20px",
-          textAlign: "center",
-          cursor: "pointer",
-          backgroundColor: "#f0f0f0",
-          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-          transition: "border-color 0.3s ease",
+      <FileDrop
+        onDrop={onDrop}
+        onTargetClick={() => document.getElementById('file-input').click()}
+        onDragOver={() => {}}
+        onDragLeave={() => {}}
+        style={{
+          border: "10px dotted black", 
+          borderRadius: "2000px", 
+          padding: "40px", 
+          backgroundColor: "#f0f0f0", 
+          textAlign: "center", 
+          cursor: "pointer", 
+          boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)", 
+          transition: "border-color 0.3s ease", 
+          position: "relative",
           "&:hover": {
-            borderColor: "#303f9f",
+            borderColor: "#303f9f", 
+            backgroundColor: "#f0f0f0",
           },
-          marginTop: "50px",
+          marginTop: "50px", 
         }}
       >
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <Typography variant="body1" color="primary">
-            Drop the files here...
-          </Typography>
-        ) : (
-          <>
-            <UploadFileIcon sx={{ fontSize: 50, color: "#757575" }} />
-            <Typography variant="body1" mt={2}>
-              Drag & drop files here, or click to select
-            </Typography>
-          </>
-        )}
-      </Box>
+        <input
+          id="file-input"
+          type="file"
+          multiple
+          style={{ display: 'none' }}
+          onChange={(e) => onDrop(e.target.files)}
+        />
+        <Typography variant="body1" mt={2} sx={{ color: "#757575" }}>
+          Drag & drop files here, or click to select
+        </Typography>
+      </FileDrop>
 
       {previewFiles.length > 0 && !fileUploadSuccess && (
         <Box sx={{ mt: 3, width: "100%", maxWidth: 600 }}>
@@ -236,7 +227,7 @@ const FileUpload = () => {
         variant="h5"
         mt={5}
         gutterBottom
-        sx={{ textAlign: "center" }} 
+        sx={{ textAlign: "center" }}
       >
         Uploaded Files
       </Typography>
