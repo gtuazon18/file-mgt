@@ -274,7 +274,7 @@ const FileUpload = () => {
                   <TextField
                       label="Add Tags"
                       variant="outlined"
-                      onChange={(e) => handleTagChange(e, file.original_name)} 
+                      onChange={(e) => setTags(e.target.value)}
                       size="small"
                       value={tags }
                       sx={{ mr: 2 }}
