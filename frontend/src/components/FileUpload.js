@@ -22,12 +22,11 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [fileTags, setFileTags] = useState({}); // Tags will now be stored per file
+  const [fileTags, setFileTags] = useState({});
   const [previewFiles, setPreviewFiles] = useState([]);
   const [fileUploadSuccess, setFileUploadSuccess] = useState(false);
   const [tags, setTags] = useState("");
-  
-  // onDrop handler to update the preview files when files are dropped
+
   const onDrop = (files) => {
     if (files && files.length > 0) {
       setPreviewFiles((prevFiles) => [...prevFiles, ...files]);
@@ -36,7 +35,6 @@ const FileUpload = () => {
     }
   };
 
-  // Reset the preview files after upload
   const resetPreviewFiles = () => {
     setPreviewFiles([]);
     setFileUploadSuccess(false);
@@ -69,7 +67,7 @@ const FileUpload = () => {
         setFileUploadSuccess(true);
         alert("File uploaded successfully!");
         fetchUploadedFiles();
-        resetPreviewFiles(); // Reset after successful upload
+        resetPreviewFiles();
       } else {
         alert("File upload failed. Please try again.");
       }
@@ -133,7 +131,6 @@ const FileUpload = () => {
     });
   };
 
-  // Update tags for a specific file
   const handleTagChange = (e, filename) => {
     setFileTags({
       ...fileTags,
@@ -157,26 +154,25 @@ const FileUpload = () => {
         File Upload
       </Typography>
 
-      {/* Drag and Drop Area */}
       <FileDrop
         onDrop={onDrop}
         onTargetClick={() => document.getElementById('file-input').click()}
         style={{
-          border: "10px dotted black", // Dotted black border for drag area
-          padding: "60px", // Increased padding for better size
-          backgroundColor: "#f9f9f9", // Lighter background color
-          textAlign: "center", // Centered text and content
-          cursor: "pointer", // Pointer cursor for clickable area
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Subtle shadow to elevate the area
-          transition: "border-color 0.3s ease, background-color 0.3s ease", // Smooth transitions
-          position: "relative", // Proper positioning of the drop zone
-          width: "80%", // Set width to 80% for better responsiveness
-          maxWidth: "600px", // Max width constraint for the drop area
+          border: "10px dotted black",
+          padding: "60px", 
+          backgroundColor: "#f9f9f9", 
+          textAlign: "center", 
+          cursor: "pointer", 
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", 
+          transition: "border-color 0.3s ease, background-color 0.3s ease",
+          position: "relative", 
+          width: "80%", 
+          maxWidth: "600px",
           "&:hover": {
-            borderColor: "#303f9f", // Darker border color on hover
-            backgroundColor: "#e8e8e8", // Slightly darker background on hover
+            borderColor: "#303f9f", 
+            backgroundColor: "#e8e8e8",
           },
-          marginTop: "50px", // Space above the drop area
+          marginTop: "50px",
         }}
       >
         <input
@@ -191,12 +187,11 @@ const FileUpload = () => {
         </Typography>
       </FileDrop>
 
-      {/* File Previews */}
       {previewFiles.length > 0 && !fileUploadSuccess && (
         <Box sx={{ mt: 3, width: "100%", maxWidth: 600 }}>
           {previewFiles.map((file, index) => (
             <Box
-              key={file.name + index}  // Unique key using file name + index
+              key={file.name + index}  
               sx={{
                 position: "relative",
                 marginTop: "10px",
@@ -242,7 +237,6 @@ const FileUpload = () => {
         </Box>
       )}
 
-      {/* Uploaded Files Table */}
       <Typography variant="h5" mt={5} gutterBottom sx={{ textAlign: "center" }}>
         Uploaded Files
       </Typography>
@@ -278,18 +272,18 @@ const FileUpload = () => {
                   </TableCell>
                   <TableCell>
                   <TextField
-                    label="Add Tags"
-                    value={fileTags[file.original_name] || ""} 
-                    onChange={(e) => handleTagChange(e, file.original_name)} 
-                    variant="outlined"
-                    size="small"
-                    sx={{ mr: 2 }}
-                  />
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => addTags(file.filename)} 
-                  >
+                      label="Add Tags"
+                      variant="outlined"
+                      onChange={(e) => handleTagChange(e, file.original_name)} 
+                      size="small"
+                      value={tags }
+                      sx={{ mr: 2 }}
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => addTags(file.filename)}
+                    >
                     Add Tags
                   </Button>
                   </TableCell>
