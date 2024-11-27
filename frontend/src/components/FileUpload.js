@@ -277,7 +277,7 @@ const FileUpload = () => {
                   <TableCell>
                     <TextField
                       label="Add Tags"
-                      value={fileTags[file.original_name] || ""}
+                      value={fileTags[file.filename] || ""}
                       onChange={(e) => handleTagChange(e, file.original_name)}
                       variant="outlined"
                       size="small"
