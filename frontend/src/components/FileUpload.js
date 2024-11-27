@@ -286,7 +286,7 @@ const FileUpload = () => {
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={() => addTags(file.filename)}
+                      onClick={() => addTags(file.original_name)}
                     >
                       Add Tags
                     </Button>
