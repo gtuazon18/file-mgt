@@ -25,7 +25,8 @@ const FileUpload = () => {
   const [fileTags, setFileTags] = useState({}); // Tags will now be stored per file
   const [previewFiles, setPreviewFiles] = useState([]);
   const [fileUploadSuccess, setFileUploadSuccess] = useState(false);
-
+  const [tags, setTags] = useState("");
+  
   // onDrop handler to update the preview files when files are dropped
   const onDrop = (files) => {
     if (files && files.length > 0) {
@@ -93,28 +94,25 @@ const FileUpload = () => {
     }
   };
 
-  // Add tags to a specific file
   const addTags = async (filename) => {
     const token = localStorage.getItem("token");
   
     try {
-      const tags = Array.isArray(fileTags[filename]) ? fileTags[filename] : (fileTags[filename]?.split(",") || []);
-  
       await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/add-tags`,
-        { filename, tags },
+        { filename, tags: tags.split(",") },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
       alert("Tags added successfully!");
       fetchUploadedFiles();
+      setTags(""); 
     } catch (error) {
-      console.error("Error adding tags:", error);
       alert("Error adding tags");
     }
   };
+  
   
 
   const copyLinkToClipboard = (link) => {
