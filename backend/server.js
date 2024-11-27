@@ -141,28 +141,45 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
 
 
 
-app.get("/uploads/:filename", (req, res) => {
+app.get("/uploads/:filename", async (req, res) => {
   const file = uploadedFiles.find((f) => f.filename === req.params.filename);
 
   if (file) {
     const updatedFile = { ...file, viewCount: file.viewCount + 1 };
-    
-    db.query(
-      "UPDATE uploads SET viewCount = ? WHERE filename = ?",
-      [updatedFile.viewCount, req.params.filename],
-      (err, result) => {
-        if (err) {
-          console.log("Error updating view count:", err);
-        }
-      }
-    );
+    try {
+      const filePath = path.join(__dirname, "uploads", req.params.filename);
+      console.log("Serving file from: ", filePath);
 
-    const filePath = path.join(__dirname, "uploads", req.params.filename);
-    res.sendFile(filePath);
+      await new Promise((resolve, reject) => {
+        db.query(
+          "UPDATE uploads SET viewCount = ? WHERE filename = ?",
+          [updatedFile.viewCount, req.params.filename],
+          (err, result) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve(result);
+          }
+        );
+      });
+
+      uploadedFiles = uploadedFiles.map((f) =>
+        f.filename === req.params.filename ? updatedFile : f
+      );
+
+      // Serve the file
+      res.sendFile(filePath);
+
+    } catch (err) {
+      console.error("Error updating view count:", err);
+      res.status(500).json({ message: "Internal server error" });
+    }
   } else {
     res.status(404).json({ message: "File not found" });
   }
 });
+
+
   
   
 
