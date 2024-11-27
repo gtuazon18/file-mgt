@@ -47,7 +47,9 @@ npm install
 
 Screenshots
 Login and Registration
-![image](https://github.com/user-attachments/assets/e987602f-9192-476d-bbd6-38fa82e262c8)
+![image](https://github.com/user-attachments/assets/9a39537a-f929-4ec6-997d-70a7f27a8e60)
+![image](https://github.com/user-attachments/assets/218bdb4c-ab04-46cc-b9e0-97ab748be8a1)
+
 ![image](https://github.com/user-attachments/assets/7e1c298a-a99a-4a65-ac3e-6541b5d53dcf)
 
 
