@@ -178,11 +178,15 @@ app.get("/uploads/:filename", (req, res) => {
 app.post("/add-tags", authenticateToken, async (req, res) => {
   const { filename, tags } = req.body;
 
+  if (!filename || typeof filename !== "string" || filename.trim() === "") {
+    return res.status(400).json({ message: "Invalid filename" });
+  }
+
   try {
     const [file] = await db.query("SELECT * FROM files WHERE filename = ?", [filename]);
     if (file.length === 0) return res.status(400).json({ message: "File not found" });
 
-    await db.query("UPDATE files SET tags = ? WHERE filename = ?", [tags, filename]);
+    await db.query("UPDATE files SET tags = ? WHERE filename = ?", [updatedTags, filename]);
 
     res.json({ message: "Tags added successfully" });
   } catch (err) {
@@ -190,6 +194,7 @@ app.post("/add-tags", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Database error" });
   }
 });
+
 
 app.get("/uploads", authenticateToken, async (req, res) => {
   try {
