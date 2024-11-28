@@ -145,23 +145,34 @@ app.get("/uploads/:filename", async (req, res, next) => {
 
   try {
     const [file] = await db.query("SELECT * FROM files WHERE filename = ?", [filename]);
-    
+
     if (file.length === 0) {
       return res.status(404).json({ message: "File not found" });
     }
 
     const updatedFile = { ...file[0], viewCount: file[0].viewCount + 1 };
 
-    await db.query(
+    const [updateResult] = await db.query(
       "UPDATE files SET viewCount = ? WHERE filename = ?",
       [updatedFile.viewCount, filename]
     );
+
+    if (updateResult.affectedRows === 0) {
+      return res.status(500).json({ message: "Failed to update view count" });
+    }
 
     uploadedFiles = uploadedFiles.map((f) =>
       f.filename === filename ? updatedFile : f
     );
 
-    res.redirect(`${updatedFile[0].filePath}`);
+    const filePath = path.join(__dirname, "uploads", filename);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.error("Error sending file:", err);
+        return res.status(500).json({ message: "Error sending file" });
+      }
+      console.log(`File sent: ${filename}`);
+    });
 
   } catch (err) {
     console.error("Error updating view count:", err);
