@@ -5,7 +5,8 @@ This is a web application for secure user login and multimedia file management. 
 - **Backend**: Powered by Node.js and Express, handles authentication, file uploads, and API routes.
 - **Frontend**: Built with React, providing a user interface for login and file management.
 
-## Dependencies
+## Live Server
+http://134.122.69.195/
 
 ### Backend (Node.js)
 - `express`: Web framework for Node.js.
