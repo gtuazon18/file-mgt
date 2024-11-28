@@ -117,10 +117,10 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
     const fileData = {
       filename: req.file.filename,
       originalName: req.file.originalname,
-      filePath: `/uploads/${req.file.filename}`,
+      filePath: `/uploads/${req.file.filename}`, 
       tags: null,
       viewCount: 0,
-      shareableLink: `${req.protocol}://${req.get('host').split(':')[0]}:80/uploads/${req.file.filename}`,
+      shareableLink: `${req.protocol}://${req.get('host').split(':')[0]}:80/uploads/${req.file.filename}`, 
       userId,
     };
 
@@ -140,48 +140,37 @@ app.post("/upload", authenticateToken, upload.single("file"), async (req, res) =
 });
 
 
-
 app.get("/uploads/:filename", async (req, res, next) => {
-  const file = uploadedFiles.find((f) => f.filename === req.params.filename);
+  const { filename } = req.params;
 
-  if (file) {
-    const updatedFile = { ...file, viewCount: file.viewCount + 1 };
-    try {
-      const filePath = path.join(__dirname, "uploads", req.params.filename);
-      console.log("Serving file from: ", filePath);
-
-      await new Promise((resolve, reject) => {
-        db.query(
-          "UPDATE uploads SET viewCount = ? WHERE filename = ?",
-          [updatedFile.viewCount, req.params.filename],
-          (err, result) => {
-            if (err) {
-              return reject(err);
-            }
-            resolve(result);
-          }
-        );
-      });
-
-      uploadedFiles = uploadedFiles.map((f) =>
-        f.filename === req.params.filename ? updatedFile : f
-      );
-
-      res.sendFile(filePath);
-
-    } catch (err) {
-      console.error("Error updating view count:", err);
-      res.status(500).json({ message: "Internal server error" });
+  try {
+    const [file] = await db.query("SELECT * FROM files WHERE filename = ?", [filename]);
+    
+    if (file.length === 0) {
+      return res.status(404).json({ message: "File not found" });
     }
-  } else {
-    next();
+
+    const updatedFile = { ...file[0], viewCount: file[0].viewCount + 1 };
+
+    await db.query(
+      "UPDATE files SET viewCount = ? WHERE filename = ?",
+      [updatedFile.viewCount, filename]
+    );
+
+    uploadedFiles = uploadedFiles.map((f) =>
+      f.filename === filename ? updatedFile : f
+    );
+
+    res.redirect(`${updatedFile[0].filePath}`);
+
+  } catch (err) {
+    console.error("Error updating view count:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-  
-  
+
 
 app.post("/add-tags", authenticateToken, async (req, res) => {
   const { filename, tags } = req.body;
