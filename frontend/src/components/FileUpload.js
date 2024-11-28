@@ -79,14 +79,13 @@ const FileUpload = () => {
 
   const fetchUploadedFiles = async () => {
     const token = localStorage.getItem("token");
-
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/uploads`, {
+      const res = await axios.get(process.env.REACT_APP_API_BASE_URL + "/uploads", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUploadedFiles(res.data);
     } catch (error) {
-      alert("Error fetching uploaded files");
+      alert("Error fetching files");
     }
   };
 
@@ -116,14 +115,18 @@ const FileUpload = () => {
   
 
   const copyLinkToClipboard = (link) => {
+    const updatedLink = link.replace(":80", ":5000");
+  
     const textArea = document.createElement("textarea");
-    textArea.value = link;
+    textArea.value = updatedLink;
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand("copy");
     document.body.removeChild(textArea);
+  
     alert("Link copied to clipboard!");
   };
+  
 
   const removePreviewFile = (index) => {
     setPreviewFiles((prevFiles) => {
@@ -270,7 +273,7 @@ const FileUpload = () => {
                       color="primary"
                       onClick={() => copyLinkToClipboard(file.shareable_link)}
                     >
-                      Copy Link
+                      Share Link
                     </Button>
                   </TableCell>
                   <TableCell>
