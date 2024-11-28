@@ -62,7 +62,6 @@ User
 ![image](https://github.com/user-attachments/assets/e689d613-fce7-4604-8b50-4acdfd6c5805)
 
 With View Count
-![image](https://github.com/user-attachments/assets/0e6453aa-5e4a-4747-8a59-ef6ab361e408)
 
 Sharable Link Can View Even not logging in
 ![image](https://github.com/user-attachments/assets/d9e13933-5e50-4be0-bc90-83075703de9a)
