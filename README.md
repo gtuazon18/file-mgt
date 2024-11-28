@@ -52,6 +52,7 @@ Login and Registration
 
 ![image](https://github.com/user-attachments/assets/7e1c298a-a99a-4a65-ac3e-6541b5d53dcf)
 
+![image](https://github.com/user-attachments/assets/9de9219d-7624-4b07-bb9f-08bfdb539ecd)
 
 User
 ![image](https://github.com/user-attachments/assets/d41a66db-9ad1-484d-b24f-233cf61c867c)
@@ -64,11 +65,14 @@ With View Count
 ![image](https://github.com/user-attachments/assets/0e6453aa-5e4a-4747-8a59-ef6ab361e408)
 
 Sharable Link Can View Even not logging in
+![image](https://github.com/user-attachments/assets/d9e13933-5e50-4be0-bc90-83075703de9a)
+
 Image
 ![image](https://github.com/user-attachments/assets/2b721811-453a-4bd5-ae1f-9f759082ce98)
 Video
 ![image](https://github.com/user-attachments/assets/29c32925-06bf-4880-b23a-694cea5c86ef)
 
+![image](https://github.com/user-attachments/assets/3427176a-44dd-4e3d-9a2f-a71efae5d4dc)
 
 Admin
 Can delete and Check View Count
